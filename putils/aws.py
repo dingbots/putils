@@ -32,7 +32,7 @@ def get_region(resource):
     elif 'AWS_DEFAULT_REGION' in os.environ:
         return os.environ['AWS_DEFAULT_REGION']
     else:
-        raise NoRegionError("Unable to determine AWS Region")
+        raise NoRegionError
 
 
 @component(outputs=['cert', 'cert_arn'])
