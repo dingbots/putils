@@ -10,7 +10,7 @@ from .paio import outputish
 __all__ = 'get_region', 'Certificate', 'a_aaaa', 'get_public_subnets'
 
 
-class NoRegionError:
+class NoRegionError(Exception):
     """
     Raised if we aren't able to detect the current region
     """
@@ -32,7 +32,7 @@ def get_region(resource):
     elif 'AWS_DEFAULT_REGION' in os.environ:
         return os.environ['AWS_DEFAULT_REGION']
     else:
-        raise NoRegionError
+        raise NoRegionError("Unable to determine AWS Region")
 
 
 @component(outputs=['cert', 'cert_arn'])
