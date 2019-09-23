@@ -96,3 +96,26 @@ async def get_public_subnets(vpc=None, opts=None):
     # TODO: Filter for public subnets
 
     return vpc, subnets, bool(vpc.ipv6_cidr_block)
+
+
+class ZoneNotFoundError(Exception):
+    """
+    Unable to find a zone for the given domain.
+    """
+
+
+def find_zone(domain):
+    """
+    Attempts to find the Route53 zone for the given domain.
+    """
+    # FIXME: Cache these results
+    zonename = domain
+    while '.' in zonename:
+        try:
+            zone = route53.get_zone(name=zonename)
+        except Exception:
+            _, zonename = zonename.split('.', 1)
+        else:
+            return zone
+    else:
+        raise ZoneNotFoundError(f"Unable to find zone for domain {domain}")
