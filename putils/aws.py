@@ -80,10 +80,12 @@ def Certificate(self, name, domain, zone_id=None, __opts__=None):
     }
 
 
-def a_aaaa(__name__, *pargs, **kwargs):
+def a_aaaa(__name__, **kwargs):
     assert 'type' not in kwargs
-    a = route53.Record(f"{__name__}-a", *pargs, type='A', **kwargs)
-    aaaa = route53.Record(f"{__name__}-aaaa", *pargs, type='AAAA', **kwargs)
+    if 'zone_id' not in kwargs:
+        kwargs['zone_id'] = find_zone(kwargs['name'])
+    a = route53.Record(f"{__name__}-a", type='A', **kwargs)
+    aaaa = route53.Record(f"{__name__}-aaaa", type='AAAA', **kwargs)
     return a, aaaa
 
 
