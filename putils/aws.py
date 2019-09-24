@@ -1,4 +1,5 @@
 import asyncio
+import functools
 import os
 
 import pulumi
@@ -109,6 +110,7 @@ class ZoneNotFoundError(Exception):
     """
 
 
+@functools.lru_cache()
 def find_zone(domain):
     """
     Attempts to find the Route53 zone for the given domain.
