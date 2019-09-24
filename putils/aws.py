@@ -38,7 +38,7 @@ def get_region(resource):
 
 
 @component(outputs=['cert', 'cert_arn'])
-def Certificate(self, name, domain, zone, __opts__):
+def Certificate(self, name, domain, zone_id=None, __opts__=None):
     """
     Gets a TLS certifcate for the given domain, using ACM and DNS validation.
 
@@ -51,12 +51,15 @@ def Certificate(self, name, domain, zone, __opts__):
         **opts(parent=self),
     )
 
+    if zone_id is None:
+        zone_id = find_zone(domain).id
+
     # TOOD: Multiple DVOs
     dvo = cert.domain_validation_options[0]
     record = route53.Record(
         f"{name}-validation-record",
         name=dvo['resourceRecordName'],
-        zone_id=zone.zone_id,
+        zone_id=zone_id,
         type=dvo['resourceRecordType'],
         records=[dvo['resourceRecordValue']],
         ttl=10*60,  # 10 minutes
