@@ -7,7 +7,9 @@ from pulumi_aws import acm, route53, ec2
 from .component import component
 from .localstack import opts
 from .paio import outputish
-__all__ = 'get_region', 'Certificate', 'a_aaaa', 'get_public_subnets'
+__all__ = (
+    'get_region', 'Certificate', 'a_aaaa', 'get_public_subnets', 'find_zone',
+)
 
 
 class NoRegionError(Exception):
